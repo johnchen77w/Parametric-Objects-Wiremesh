@@ -21,15 +21,20 @@ class cameraMatrix:
         self.__M = self.__C*self.__Mv
 
     def __setMv(self,U,V,N,E):
-        u = U*U
-        __Mv = matrix(np.zeros((2,4)))
-        __Mv.set(0,0,u)
-        __Mv.set(0,1,-E*U)
-        __Mv.set(1,0,V)
-        __Mv.set(1,1,-E*V)
-        __Mv.set(2,0,N)
-        __Mv.set(2,1,-E*N)
-        __Mv.set(3,1,1.0)
+        __Mv = matrix(np.identity(4))
+        __Mv.set(0,0,U.get(0,0))
+        __Mv.set(1,0,V.get(0,0))
+        __Mv.set(2,0,N.get(0,0))
+        __Mv.set(0,1,U.get(1,0))
+        __Mv.set(1,1,V.get(1,0))
+        __Mv.set(2,1,N.get(1,0))
+        __Mv.set(0,2,U.get(2,0))
+        __Mv.set(1,2,V.get(2,0))
+        __Mv.set(2,2,N.get(2,0))
+        E = E.removeRow(3).transpose()
+        __Mv.set(0,3,(-E*U).get(0,0))
+        __Mv.set(1,3,(-E*V).get(0,0))
+        __Mv.set(2,3,(-E*N).get(0,0))
         return __Mv
 
     def __setMp(self,nearPlane,farPlane):
@@ -39,7 +44,7 @@ class cameraMatrix:
         __Mp.set(0,0,nearPlane)
         __Mp.set(1,1,nearPlane)
         __Mp.set(2,2,a)
-        __Mp.set(2,3,b)
+        __Mp.set(2,3,b)   
         __Mp.set(3,2,-1)
         return __Mp
 
@@ -50,7 +55,7 @@ class cameraMatrix:
         l = -r
         __T1 = matrix(np.identity(4))
         __T1.set(0,3,-(r+l)/2)
-        __T1.set(1,1,-(t+b)/2)
+        __T1.set(1,3,-(t+b)/2)
         return __T1
 
     def __setS1(self,nearPlane,theta,aspect):

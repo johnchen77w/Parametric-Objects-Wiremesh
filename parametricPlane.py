@@ -15,7 +15,7 @@ class parametricPlane(parametricObject):
     #    0
     #    1
 
-    def getPoint(self,u,v,width,height):
+    def getPoint(self,u,v):
         __P = matrix(np.ones((4,1)))
         __P.set(0,0,self.__width*u)
         __P.set(1,0,self.__height*v)
