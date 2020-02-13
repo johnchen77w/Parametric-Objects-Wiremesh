@@ -7,6 +7,7 @@ from parametricSphere import parametricSphere
 from parametricTorus import parametricTorus
 from wireMesh import wireMesh
 
+# This class implements helper methods for Mv, Mp, T1, S1, T2, S2 and W2
 class cameraMatrix:
     
     def __init__(self,UP,E,G,nearPlane=10.0,farPlane=50.0,width=640,height=480,theta=90.0):
@@ -25,6 +26,7 @@ class cameraMatrix:
         self.__C = __W2*__S2*__T2*__S1*__T1*__Mp
         self.__M = self.__C*self.__Mv
 
+    # This routine sets up the Mv matrix
     def __setMv(self,U,V,N,E):
         __Mv = matrix(np.identity(4))
         __Mv.set(0,0,U.get(0,0))
@@ -42,6 +44,7 @@ class cameraMatrix:
         __Mv.set(2,3,(-E*N).get(0,0))
         return __Mv
 
+    # This routine sets up the Mp matrix
     def __setMp(self,nearPlane,farPlane):
         a = -(farPlane+nearPlane)/(farPlane-nearPlane)
         b = -(2*farPlane*nearPlane)/(farPlane-nearPlane)
@@ -53,6 +56,7 @@ class cameraMatrix:
         __Mp.set(3,2,-1)
         return __Mp
 
+    # This routine sets up the T1 matrix
     def __setT1(self,nearPlane,theta,aspect):
         t = nearPlane * tan((pi/180)*(theta/2))
         b = -t
@@ -63,6 +67,7 @@ class cameraMatrix:
         __T1.set(1,3,-(t+b)/2)
         return __T1
 
+    # This routine sets up the S1 matrix
     def __setS1(self,nearPlane,theta,aspect):
         t = nearPlane * tan((pi/180)*(theta/2))
         b = -t
@@ -73,18 +78,21 @@ class cameraMatrix:
         __S1.set(1,1,2/(t-b))
         return __S1
 
+    # This routine sets up the T2 matrix
     def __setT2(self):
         __T2 = matrix(np.identity(4))
         __T2.set(0,3,1.0)
         __T2.set(1,3,1.0)
         return __T2
 
+    # This routine sets up the S2 matrix
     def __setS2(self,width,height):
         __S2 = matrix(np.identity(4))
         __S2.set(0,0,width/2)
         __S2.set(1,1,height/2)
         return __S2
 
+    # This routine sets up the W2 matrix
     def __setW2(self,height):
         __W2 = matrix(np.identity(4))
         __W2.set(1,1,-1)
@@ -128,6 +136,8 @@ class cameraMatrix:
         return self.__M
 
 
+# This class implements the parametric equation of a parametric circle as a column matrix
+# parametricCircle is a type of parametricObject
 class parametricCircle(parametricObject):
     
     def __init__(self,T=matrix(np.identity(4)),radius=1.0,color=(0,0,0),reflectance=(0.0,0.0,0.0),uRange=(0.0,0.0),vRange=(0.0,0.0),uvDelta=(0.0,0.0)):
@@ -153,6 +163,8 @@ class parametricCircle(parametricObject):
         return self.__radius
 
 
+# This class implements the parametric equation of a parametric cone as a column matrix
+# parametricCone is a type of parametricObject
 class parametricCone(parametricObject):
     
     def __init__(self,T=matrix(np.identity(4)),height=1.0,radius=1.0,color=(0,0,0),reflectance=(0.0,0.0,0.0),uRange=(0.0,0.0),vRange=(0.0,0.0),uvDelta=(0.0,0.0)):
@@ -185,6 +197,8 @@ class parametricCone(parametricObject):
         return self.__radius
 
 
+# This class implements the parametric equation of a parametric cylinder as a column matrix
+# parametricCylinder is a type of parametricObject
 class parametricCylinder(parametricObject):
     
     def __init__(self,
@@ -218,6 +232,8 @@ class parametricCylinder(parametricObject):
         return self.__radius
 
 
+# This class implements the parametric equation of a parametric plane as a column matrix
+# parametricPlane is a type of parametricObject
 class parametricPlane(parametricObject):
     
     def __init__(self,T=matrix(np.identity(4)),width=1.0,height=1.0,color=(0,0,0),reflectance=(0.0,0.0,0.0),uRange=(0.0,0.0),vRange=(0.0,0.0),uvDelta=(0.0,0.0)):
